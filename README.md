@@ -10,7 +10,6 @@ This is the backend server for the **Image-to-Song** iOS app, which allows users
 - **Image and Song History**: Stores each user’s image-to-song history for easy retrieval and future reference.
 
 ## Tech Stack
-
+- **Swift**: For creating an aesthetic frontend.
 - **Node.js** and **Express**: For building the backend server.
 - **Firebase**: Manages user data, stores images and song history, and handles authentication.
-- **dotenv**: Manages environment variables for sensitive data.
