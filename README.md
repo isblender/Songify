@@ -1,4 +1,4 @@
-# Image-to-Song App Backend
+# Image-to-Song App
 
 This is the backend server for the **Image-to-Song** iOS app, which allows users to take a picture, apply an algorithm on it, and get a song that resembles the image. The backend is built with **Node.js** and **Express**, and it uses **Firebase** for user data management and storage of image history and song recommendations.
 
