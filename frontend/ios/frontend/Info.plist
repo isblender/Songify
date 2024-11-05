@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>myapp</string>
-          <string>com.anonymous.frontend</string>
+          <string>com.dsu.imgtosong</string>
         </array>
       </dict>
     </array>
