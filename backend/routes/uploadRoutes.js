@@ -1,8 +1,8 @@
-const express = require("express");
-const { uploadImage } = require("../functions/uploadFunction");
+// const express = require("express");
+// const { uploadImage } = require("../functions/uploadFunction");
 
-const router = express.Router();
+// const router = express.Router();
 
-router.post("/upload", uploadImage);
+// router.post("/upload", uploadImage);
 
-module.exports = router;
+// module.exports = router;

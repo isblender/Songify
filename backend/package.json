@@ -15,7 +15,9 @@
     "express": "^4.21.1",
     "firebase-admin": "^12.6.0",
     "gridfs-stream": "^1.1.1",
-    "mongoose": "^8.7.3",
+    "mongo": "^0.1.0",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.0",
     "multer": "^1.4.5-lts.1"
   }
 }

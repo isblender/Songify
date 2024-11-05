@@ -1,6 +1,6 @@
 // const admin = require("firebase-admin");
 // const db = admin.firestore();
-const methods = require("./mongo");
+const methods = require("../mongo");
 const user_collection = methods.user_collection;
 const conversion_collection = methods.conversion_collection;
 

@@ -16,14 +16,14 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // // // Import routes
-const uploadRoutes = require("./routes/uploadRoutes");
-const historyRoutes = require("./routes/historyRoutes");
+// const uploadRoutes = require("./routes/uploadRoutes");
+// const historyRoutes = require("./routes/historyRoutes");
 const loginRoutes = require("./routes/loginRoutes");
 const signupRoutes = require("./routes/signupRoutes");
 
 // // // Use routes
-app.use("/api/upload", uploadRoutes);
-app.use("/api/history", historyRoutes);
+// app.use("/api/upload", uploadRoutes);
+// app.use("/api/history", historyRoutes);
 app.use("api/login", loginRoutes);
 app.use("api/signup", signupRoutes);
 
