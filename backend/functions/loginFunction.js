@@ -1,4 +1,4 @@
-const methods = require("./mongo");
+const methods = require("../mongo");
 const user_collection = methods.user_collection;
 const conversion_collection = methods.conversion_collection;
 
