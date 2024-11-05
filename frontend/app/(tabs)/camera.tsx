@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Button, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, TouchableOpacity, Button, StyleSheet, Image } from 'react-native';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { useNavigation } from '@react-navigation/native';
@@ -12,6 +12,7 @@ export default function Camera() {
   };
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
+  const cameraRef = useRef(null);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -32,13 +33,20 @@ export default function Camera() {
     console.log('flippy')
     setFacing(current => (current === 'back' ? 'front' : 'back'));
   }
+  
+  async function takePicture() {
+    if (cameraRef.current) {
+      const photo = await cameraRef.current.takePictureAsync();
+      console.log(photo);
+    }
+  }
 
   return (
       <View style={styles.container}>
         <CameraView style={styles.camera} facing={facing}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-              <Text style={styles.text}>Flip Camera</Text>
+              <Image source={require('../../assets/images/flip.png')} style={{width:30, height:30, backgroundColor: 'transparent'}}/>
             </TouchableOpacity>
           </View>
         </CameraView>
@@ -66,7 +74,7 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'transparent',
     borderRadius: 5,
   },
   text: {

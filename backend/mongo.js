@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  history: {
+    type: Array,
+    required: true,
+    default: [],
+  }
 });
 
 const conversionSchema = new mongoose.Schema({
