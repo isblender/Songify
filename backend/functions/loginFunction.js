@@ -4,6 +4,7 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    console.log('login request');
     // Find the user by email
     const user = await User.findOne({ email });
     if (!user) {

@@ -46,11 +46,12 @@ export default function CameraScreen() {
       try {
         const options = {
           quality: 0.7,
-          base64: false,
+          base64: true,
           skipProcessing: false,
         };
         const photo: CameraCapturedPicture = await cameraRef.current.takePictureAsync(options);
-        console.log('Photo taken:', photo.uri);
+        console.log('Photo taken:', photo.base64);
+        
         // Handle the photo as needed
       } catch (error) {
         console.error('Error taking picture:', error);

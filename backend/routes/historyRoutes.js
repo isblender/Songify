@@ -1,8 +1,8 @@
-// const express = require("express");
-// const { getUserHistory } = require("../functions/historyFunction");
+const express = require("express");
+const { getUserHistory } = require("../functions/historyFunction");
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.get("/history/:userId", getUserHistory);
+router.get("/history/:userId", getUserHistory);
 
-// module.exports = router;
+module.exports = router;
