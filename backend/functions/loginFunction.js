@@ -1,26 +1,23 @@
-const methods = require("../mongo");
-const user_collection = methods.user_collection;
-const conversion_collection = methods.conversion_collection;
+const User = require("../models/User");
 
-exports.logIn = async (req, res) => {
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { username, phone, email, password } = req.body;
-
-    const checkExist = await student_collection.findOne({
-      username: username,
-    });
-    const checkMatch = await user_collection.findOne({
-      email: email,
-      password: password,
-    });
-
-    if (!checkExist) {
-      res.json("userNotExist");
-    } else if (!checkMatch) {
-      res.json("userNotMatched");
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
+
+    // Check if the password matches
+    if (user.password !== password) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    return res.json({ message: "Login successful" });
   } catch (error) {
-    console.error("Error processing image:", error);
+    console.error("Login error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

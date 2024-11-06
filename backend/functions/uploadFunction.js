@@ -28,3 +28,16 @@
 //     res.status(500).json({ error: "Internal server error" });
 //   }
 // };
+async function addConversion(userId, photoId, songName) {
+    const conversion = new Conversion({
+      userId,
+      photo: photoId,
+      songName,
+    });
+    await conversion.save();
+  
+    // Update user history
+    await User.findByIdAndUpdate(userId, {
+      $push: { history: conversion._id },
+    });
+  }

@@ -1,38 +1,31 @@
-// const admin = require("firebase-admin");
-// const db = admin.firestore();
-const methods = require("../mongo");
-const user_collection = methods.user_collection;
-const conversion_collection = methods.conversion_collection;
+// controllers/userController.js
+const User = require("../models/User");
 
 exports.signUp = async (req, res) => {
   const { username, phone, email, password } = req.body;
 
-  console.log("Username:", username);
-  console.log("Phone:", phone);
-  console.log("Email:", email);
-  console.log("Password:", password);
+  console.log("Signup Request - Username:", username, "Phone:", phone, "Email:", email);
 
-  const profileData = {
-    username: username,
-    phone: phone,
-    email: email,
-    password: password,
-  };
+  const profileData = { username, phone, email, password };
 
   try {
-    const accountExist =
-      (await user_collection.findOne({ phone: phone })) ||
-      (await user_collection.findOne({ email: email }));
-    const usernameExist = await user_collection.findOne({ username: username });
+    // Check for existing account by phone or email
+    const accountExist = await User.findOne({
+      $or: [{ phone }, { email }],
+    });
+    const usernameExist = await User.findOne({ username });
+
     if (accountExist) {
-      res.json("accountExist");
+      return res.json("accountExist");
     } else if (usernameExist) {
-      res.json("usernameExist");
-    } else {
-      res.json("newUser");
-      await user_collection.insertMany([profileData]);
+      return res.json("usernameExist");
     }
+
+    // Create new user if no conflicts
+    await User.create(profileData);
+    return res.json("newUser");
   } catch (error) {
+    console.error("Signup error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -23,3 +23,11 @@
 //     res.status(500).json({ error: "Internal server error" });
 //   }
 // };
+
+async function getUserHistory(userId) {
+    const user = await User.findById(userId).populate({
+        path: "history",
+        model: "Conversion",
+    });
+    return user.history;
+}
