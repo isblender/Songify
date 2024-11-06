@@ -1,26 +1,34 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, Button, StyleSheet, Image } from 'react-native';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import GestureRecognizer from 'react-native-swipe-gestures';
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Button,
+  Image,
+  Animated,
+  Easing,
+  Dimensions,
+} from 'react-native';
+import {
+  CameraView,
+  CameraType,
+  useCameraPermissions,
+  CameraCapturedPicture,
+} from 'expo-camera';
+import { useRouter } from 'expo-router';
+import { styles } from '../styles/CameraStyles'; // Import styles
 
-export default function Camera() {
-  const navigation = useNavigation();
-  const onSwipeDown = () => {
-    console.log('test')
-    navigation.navigate('history');
-  };
+export default function CameraScreen() {
+  const router = useRouter();
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
-  const cameraRef = useRef(null);
+  const cameraRef = useRef<CameraView>(null);
 
   if (!permission) {
-    // Camera permissions are still loading.
     return <View />;
   }
 
   if (!permission.granted) {
-    // Camera permissions are not granted yet.
     return (
       <View style={styles.container}>
         <Text style={styles.message}>We need your permission to show the camera</Text>
@@ -30,55 +38,58 @@ export default function Camera() {
   }
 
   function toggleCameraFacing() {
-    console.log('flippy')
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  }
-  
-  async function takePicture() {
-    if (cameraRef.current) {
-      const photo = await cameraRef.current.takePictureAsync();
-      console.log(photo);
-    }
+    setFacing((current) => (current === 'back' ? 'front' : 'back'));
   }
 
+  async function takePicture(): Promise<void> {
+    if (cameraRef.current) {
+      try {
+        const options = {
+          quality: 0.7,
+          base64: false,
+          skipProcessing: false,
+        };
+        const photo: CameraCapturedPicture = await cameraRef.current.takePictureAsync(options);
+        console.log('Photo taken:', photo.uri);
+        // Handle the photo as needed
+      } catch (error) {
+        console.error('Error taking picture:', error);
+      }
+    }
+  }
   return (
-      <View style={styles.container}>
-        <CameraView style={styles.camera} facing={facing}>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-              <Image source={require('../../assets/images/flip.png')} style={{width:30, height:30, backgroundColor: 'transparent'}}/>
+    <View style={{ flex: 1 }}>
+        <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
+          {/* Top Right Buttons */}
+          <View style={styles.topRightButtonContainer}>
+            {/* User Button */}
+            <TouchableOpacity
+              style={styles.topButton}
+              onPress={() => router.push('/user')}
+            >
+              <Image
+                source={require('../../assets/images/user.png')}
+                style={styles.topIcon}
+              />
+            </TouchableOpacity>
+            {/* Flip Camera Button */}
+            <TouchableOpacity style={styles.topButton} onPress={toggleCameraFacing}>
+              <Image
+                source={require('../../assets/images/flip.png')}
+                style={styles.topIcon}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* Capture Button Centered at the Bottom */}
+          <View style={styles.bottomCenterButtonContainer}>
+            <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
+              <View style={styles.outerCircle}>
+                <View style={styles.innerCircle} />
+              </View>
             </TouchableOpacity>
           </View>
         </CameraView>
-      </View>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  message: {
-    textAlign: 'center',
-    paddingBottom: 10,
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    alignSelf: 'center',
-    backgroundColor: 'transparent',
-  },
-  button: {
-    padding: 10,
-    backgroundColor: 'transparent',
-    borderRadius: 5,
-  },
-  text: {
-    fontSize: 20,
-    color: 'white',
-  },
-});

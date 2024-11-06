@@ -1,15 +1,11 @@
-import { Text, View } from "react-native";
+import { Camera } from 'expo-camera';
+import { Redirect } from 'expo-router';
+import CameraView from './camera'
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Index() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Profile</Text>
-    </View>
-  );
+  <GestureHandlerRootView>
+    <CameraView />
+  </GestureHandlerRootView>)
 }

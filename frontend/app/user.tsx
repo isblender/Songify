@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-export default function History() {
+export default function Index() {
   return (
     <View
       style={{
@@ -9,11 +9,7 @@ export default function History() {
         alignItems: "center",
       }}
     >
-      <Text>History</Text>
+      <Text>Profile</Text>
     </View>
   );
-}
-
-export function HistoryContent() {
-  return <History />;
 }
