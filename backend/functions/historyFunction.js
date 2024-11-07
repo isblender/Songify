@@ -1,3 +1,5 @@
+const User = require("../models/User");
+
 async function getUserHistory(userId) {
     const user = await User.findById(userId).populate({
         path: "history",
@@ -5,3 +7,5 @@ async function getUserHistory(userId) {
     });
     return user.history;
 }
+
+module.exports = { getUserHistory };
