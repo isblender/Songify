@@ -50,7 +50,24 @@ export default function CameraScreen() {
           skipProcessing: false,
         };
         const photo: CameraCapturedPicture = await cameraRef.current.takePictureAsync(options);
-        console.log('Photo taken:', photo.base64);
+        //console.log('Photo taken:', photo.base64);
+        if (photo.base64 === undefined) {
+          console.error('Error taking picture: No photo captured');
+          return
+        }
+        const base64 = photo.base64.split(',')[1]
+        console.log('Base64:', base64)
+        fetch('http://131.179.84.179:3000/api/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: '672ad3a01aa455690fa533bc',
+            photoBase64: base64,
+            songName: 'Testing'
+          })
+        })
         
         // Handle the photo as needed
       } catch (error) {

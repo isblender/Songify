@@ -5,7 +5,13 @@ exports.upload = async (req, res) => {
   const { userId, photoBase64, songName } = req.body;
 
   try {
-    console.log('upload request')
+    console.log('upload request');
+
+    // Check if photoBase64 is valid
+    if (!photoBase64 || typeof photoBase64 !== 'string') {
+      throw new TypeError('photoBase64 must be a valid Base64 string.');
+    }
+
     const photoBuffer = Buffer.from(photoBase64, "base64"); // Convert base64 to binary
 
     const newConversion = new Conversion({
@@ -13,6 +19,7 @@ exports.upload = async (req, res) => {
       photo: photoBuffer, // Store binary data
       songName,
     });
+
     await newConversion.save();
 
     await User.findByIdAndUpdate(userId, {

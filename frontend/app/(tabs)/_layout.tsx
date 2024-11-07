@@ -19,7 +19,7 @@ export default function TabLayout() {
           fontSize: 14, // Font size of the tab labels
           color: 'white', // Text color
         },
-      }}>
+      }} initialRouteName='camera'>
         <Tab.Screen name="history" component={HistoryScreen} options={{ title: 'History' }} />
         <Tab.Screen name="camera" component={CameraScreen} options={{ title: 'Camera' }} />
     </Tab.Navigator>
