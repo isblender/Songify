@@ -11,5 +11,5 @@ This is the backend server for the **Image-to-Song** iOS app, which allows users
 
 ## Tech Stack
 - **Swift**: For creating an aesthetic frontend.
-- **Node.js** and **Express**: For building the backend server.
-- **Firebase**: Manages user data, stores images and song history, and handles authentication.
+- **Node.js**, **Express**, and **Socket.io**: For building the backend server.
+- **MongoDB**: Manages user data, stores images and song history, and handles authentication.
