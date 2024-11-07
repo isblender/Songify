@@ -38,7 +38,8 @@
     "react-native-screens": "3.31.1",
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-tab-view": "^3.5.2",
-    "react-native-web": "~0.19.10"
+    "react-native-web": "~0.19.10",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

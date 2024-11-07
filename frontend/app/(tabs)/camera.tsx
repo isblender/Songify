@@ -57,7 +57,7 @@ export default function CameraScreen() {
         }
         const base64 = photo.base64.split(',')[1]
         console.log('Base64:', base64)
-        fetch('http://131.179.84.179:3000/api/upload', {
+        fetch('http://131.179.35.190:3000/api/upload', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

@@ -5,6 +5,8 @@ exports.upload = async (req, res) => {
   const { userId, photoBase64, songName } = req.body;
 
   try {
+    const { getIoInstance } = require("../server");
+    console.log('type of io: ', typeof getIoInstance);
     console.log('upload request');
 
     // Check if photoBase64 is valid
@@ -25,6 +27,11 @@ exports.upload = async (req, res) => {
     await User.findByIdAndUpdate(userId, {
       $push: { history: newConversion._id }
     });
+
+    const io = getIoInstance();
+    console.log(io);
+
+    io.to(userId).emit("refreshHistory");
 
     res.json({ message: "Conversion saved and added to history successfully" });
   } catch (error) {

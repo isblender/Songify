@@ -3,6 +3,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const routes = require("./routes");
 const connectDB = require("./config/mongoose");
+const http = require("http"); // Import http to create a server
+const { Server } = require("socket.io"); // Import Socket.IO
 
 const app = express();
 app.use(cors());
@@ -13,6 +15,33 @@ connectDB();
 
 app.use('/', routes);
 
-app.listen(3000, () => {
+// Create an HTTP server and integrate Socket.IO
+const server = http.createServer(app); // Create an HTTP server with Express
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Allow all origins (adjust as needed for security)
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  // Listen for a "join" event to add the socket to a user-specific room
+  socket.on("joinRoom", (userId) => {
+    socket.join(userId);
+    console.log(`User with ID ${userId} joined room ${userId}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+  });
+});
+
+const getIoInstance = () => io;
+
+module.exports = { server, getIoInstance };
+
+server.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
