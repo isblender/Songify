@@ -6,7 +6,7 @@ This is the backend server for the **Image-to-Song** iOS app, which allows users
 
 - **Image Processing**: Receives image data from the iOS app for processing to generate song recommendations.
 - **Song Recommendation**: Uses an algorithm to analyze the image and recommend a song that reflects the visual qualities of the image.
-- **User Management**: Supports user data storage via Firebase, including user authentication and personalized history of images and song responses.
+- **User Management**: Supports user data storage via MongoDB, including user authentication and personalized history of images and song responses.
 - **Image and Song History**: Stores each user’s image-to-song history for easy retrieval and future reference.
 
 ## Tech Stack
