@@ -2,8 +2,8 @@ const Conversion = require("../models/Conversion");
 const User = require("../models/User");
 
 exports.upload = async (req, res) => {
-  const { userId, photoBase64, songName } = req.body;
-
+  const { userId, photoBase64 } = req.body;
+  const songName = 'test';
   try {
     const { getIoInstance } = require("../server");
     console.log('type of io: ', typeof getIoInstance);
@@ -36,6 +36,7 @@ exports.upload = async (req, res) => {
     res.json({ message: "Conversion saved and added to history successfully" });
   } catch (error) {
     console.error("Error saving conversion:", error);
+    console.error(photoBase64);
     res.status(500).json({ error: "Internal server error" });
   }
 };

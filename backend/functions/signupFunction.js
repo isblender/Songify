@@ -1,12 +1,11 @@
 // controllers/userController.js
+const bcrypt = require('bcrypt');
 const User = require("../models/User");
 
 exports.signUp = async (req, res) => {
   const { username, phone, email, password } = req.body;
 
   console.log("Signup Request - Username:", username, "Phone:", phone, "Email:", email);
-
-  const profileData = { username, phone, email, password };
 
   try {
     // Check for existing account by phone or email
@@ -21,9 +20,15 @@ exports.signUp = async (req, res) => {
       return res.json("usernameExist");
     }
 
-    // Create new user if no conflicts
+    // Hash the password before saving the user
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create the new user with the hashed password
+    const profileData = { username, phone, email, password: hashedPassword };
     await User.create(profileData);
-    return res.json("newUser");
+    const user = await User.findOne({ email });
+
+    return res.json("newUser: ",user._id);
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ error: "Internal server error" });
