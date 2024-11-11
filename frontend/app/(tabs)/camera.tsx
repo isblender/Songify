@@ -17,12 +17,14 @@ import {
 } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { styles } from '../styles/CameraStyles'; // Import styles
+import { useAuth } from '../AuthContext';
 
 export default function CameraScreen() {
   const router = useRouter();
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
+  const { userId } = useAuth();
 
   if (!permission) {
     return <View />;
@@ -56,16 +58,16 @@ export default function CameraScreen() {
           return
         }
         const base64 = photo.base64.split(',')[1]
-        console.log('Base64:', base64)
-        fetch('http://131.179.35.190:3000/api/upload', {
+        console.log(`Uploading image to user ${userId}`)
+        console.log('Base64:', base64.slice(0, 10))
+        fetch('http://localhost:3000/api/upload', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            userId: '672ad3a01aa455690fa533bc',
-            photoBase64: base64,
-            songName: 'Testing'
+            userId: userId,
+            photoBase64: base64
           })
         })
         

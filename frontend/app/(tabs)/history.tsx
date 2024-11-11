@@ -1,29 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, Image, ScrollView, SafeAreaView } from "react-native";
 import { io } from "socket.io-client"; // Import Socket.IO client
+import { useAuth } from "../AuthContext";
 
 export default function History() {
   const [localHistory, setLocalHistory] = useState([]);
-  const userId = "672ad3a01aa455690fa533bc";
+  const {userId} = useAuth();
 
+  // Function to fetch user history
   // Function to fetch user history
   const getHistory = async () => {
     try {
-      const response = await fetch(`http://131.179.35.190:3000/api/history/${userId}`);
-      const data = await response.json();
+      if (userId !== null) {
+        console.log(`Attempting to get history of user ${userId}`);
+        const response = await fetch(`http://localhost:3000/api/history/${userId}`);
+        const data = await response.json(); // Correctly await and parse JSON
 
-      // Convert the photo data to Base64 string
-      const updatedHistory = data.map((item) => {
-        const base64Photo = btoa(
-          new Uint8Array(item.photo.data).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ""
-          )
-        );
-        return { ...item, photo: base64Photo };
-      });
+        console.log(`History fetched for ${userId}`);
+        console.log(data);
 
-      setLocalHistory(updatedHistory);
+        // Convert the photo data to Base64 string
+        const updatedHistory = data.map((item) => {
+          const base64Photo = btoa(
+            new Uint8Array(item.photo.data).reduce(
+              (acc, byte) => acc + String.fromCharCode(byte),
+              ""
+            )
+          );
+          return { ...item, photo: base64Photo };
+        });
+
+        setLocalHistory(updatedHistory);
+      } else {
+        throw new Error("User ID is null"); // Correctly throw the error
+      }
     } catch (error) {
       console.error("Error fetching user history:", error);
     }
@@ -31,27 +41,33 @@ export default function History() {
 
   // Connect to the WebSocket server and join the user-specific room
   useEffect(() => {
-    const socket = io("131.179.35.190:3000");
-
+    if (!userId) {
+      console.error("User ID is not available yet");
+      return;
+    }
+  
+    // Connect to the WebSocket server
+    const socket = io("10.254.26.176:3000");
+  
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
       socket.emit("joinRoom", userId); // Join the room with userId
     });
-
+  
     // Listen for the "refreshHistory" event
     socket.on("refreshHistory", () => {
       console.log("Received refreshHistory event, fetching history...");
       getHistory(); // Fetch updated history
     });
-
+  
     // Initial fetch of history
     getHistory();
-
+  
     // Clean up the WebSocket connection when the component unmounts
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [userId]); // Add userId to the dependency array
 
   return (
     <SafeAreaView>
