@@ -29,7 +29,7 @@ exports.upload = async (req, res) => {
 
     // Define S3 upload parameters
     const s3Params = {
-      Bucket: 'your-bucket-name', // Replace with your S3 bucket name
+      Bucket: 'image-to-song', // Replace with your S3 bucket name
       Key: `${userId}/${Date.now()}.jpg`, // Unique key for the image
       Body: photoBuffer,
       ContentEncoding: 'base64', // This ensures the content is correctly encoded
