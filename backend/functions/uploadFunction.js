@@ -24,7 +24,8 @@ exports.upload = async (req, res) => {
     if (!photoBase64 || typeof photoBase64 !== 'string') {
       throw new TypeError('photoBase64 must be a valid Base64 string.');
     }
-
+    console.log("Base64 Photo Length:", photoBase64.length);
+    console.log("Base64 Photo Preview:", photoBase64.substring(0, 50));
     const photoBuffer = Buffer.from(photoBase64, "base64"); // Convert base64 to binary
 
     // Define S3 upload parameters
