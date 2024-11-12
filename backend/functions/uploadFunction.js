@@ -34,7 +34,7 @@ exports.upload = async (req, res) => {
       Body: photoBuffer,
       ContentEncoding: 'base64', // This ensures the content is correctly encoded
       ContentType: 'image/jpeg', // Adjust based on your image type
-      ACL: 'private' // Set ACL to 'private' for security
+      ACL: 'public-read'
     };
 
     // Upload the image to S3
