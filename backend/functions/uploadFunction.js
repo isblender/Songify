@@ -33,8 +33,7 @@ exports.upload = async (req, res) => {
       Key: `${userId}/${Date.now()}.jpg`, // Unique key for the image
       Body: photoBuffer,
       ContentEncoding: 'base64', // This ensures the content is correctly encoded
-      ContentType: 'image/jpeg', // Adjust based on your image type
-      ACL: 'public-read'
+      ContentType: 'image/jpeg' // Adjust based on your image type
     };
 
     // Upload the image to S3
