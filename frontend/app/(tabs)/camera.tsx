@@ -47,7 +47,7 @@ export default function CameraScreen() {
     if (cameraRef.current) {
       try {
         const options = {
-          quality: 0.7,
+          quality: 0.5,
           base64: true,
           skipProcessing: false,
         };
@@ -60,7 +60,7 @@ export default function CameraScreen() {
         const base64 = photo.base64.split(',')[1]
         console.log(`Uploading image to user ${userId}`)
         console.log('Base64:', base64.slice(0, 10))
-        fetch('http://localhost:3000/api/upload', {
+        fetch('https://imagetosong.onrender.com/api/upload', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
