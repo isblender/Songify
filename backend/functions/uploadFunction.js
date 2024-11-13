@@ -19,7 +19,6 @@ exports.upload = async (req, res) => {
     const { getIoInstance } = require("../server");
     console.log('type of io: ', typeof getIoInstance);
     console.log("Base64 Photo Length:", photoBase64.length);
-    console.log("Base64 Photo Preview:", photoBase64.substring(0, 50));
 
     // Check if photoBase64 is valid
     if (!photoBase64 || typeof photoBase64 !== 'string') {
