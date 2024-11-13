@@ -48,4 +48,4 @@ const deleteConversion = async (req, res) => {
   }
 };
 
-module.exports = deleteConversion;
+module.exports = {deleteConversion};
