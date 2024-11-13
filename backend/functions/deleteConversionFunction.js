@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
-const { User, Conversion } = require('../models'); // Adjust to your model paths
+const User = require('../models/User');
+const Conversion = require('../models/Conversion');
 
 // Configure AWS
 AWS.config.update({
