@@ -24,9 +24,9 @@ const deleteConversion = async (req, res) => {
     console.log('Found conversion:', conversion);
     // Delete the image from AWS S3
     const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: conversion.photo.split('/').pop(), // Extract the file name from the URL
-    };
+        Bucket: 'image-to-song',
+        Key: conversion.photo.replace('https://image-to-song.s3.us-east-2.amazonaws.com/', ''), // Remove the base URL to get the full key
+      };
     console.log('Deleting image from S3:', params);
     s3.deleteObject(params, async (err, data) => {
       if (err) {
