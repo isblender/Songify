@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, ScrollView, SafeAreaView } from "react-native";
+import { Text, View, Image, ScrollView, SafeAreaView, ActivityIndicator } from "react-native";
 import { io } from "socket.io-client"; // Import Socket.IO client
 import { useAuth } from "../AuthContext";
 
 export default function History() {
   const [localHistory, setLocalHistory] = useState([]);
+  const [loading, setLoading] = useState(true); // State to manage loading indicator
   const { userId } = useAuth();
 
   // Function to fetch user history
   const getHistory = async () => {
     try {
       if (userId !== null) {
+        setLoading(true); // Show loading indicator
         console.log(`Attempting to get history of user ${userId}`);
         const response = await fetch(`https://imagetosong.onrender.com/api/history/${userId}`);
         const data = await response.json(); // Correctly await and parse JSON
@@ -18,13 +20,14 @@ export default function History() {
         console.log(`History fetched for ${userId}`);
         console.log(data);
 
-        // Use the image URLs directly from the response data
         setLocalHistory(data);
       } else {
-        throw new Error("User ID is null"); // Correctly throw the error
+        throw new Error("User ID is null");
       }
     } catch (error) {
       console.error("Error fetching user history:", error);
+    } finally {
+      setLoading(false); // Hide loading indicator
     }
   };
 
@@ -35,26 +38,23 @@ export default function History() {
       return;
     }
 
-    // Connect to the WebSocket server
     const socket = io("https://imagetosong.onrender.com");
 
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
-      socket.emit("joinRoom", userId); // Join the room with userId
+      socket.emit("joinRoom", userId);
       getHistory();
     });
 
-    // Listen for the "refreshHistory" event
     socket.on("refreshHistory", () => {
       console.log("Received refreshHistory event, fetching history...");
-      getHistory(); // Fetch updated history
+      getHistory();
     });
 
-    // Clean up the WebSocket connection when the component unmounts
     return () => {
       socket.disconnect();
     };
-  }, [userId]); // Add userId to the dependency array
+  }, [userId]);
 
   return (
     <SafeAreaView>
@@ -62,7 +62,9 @@ export default function History() {
         <Text style={{ fontSize: 24, fontWeight: "bold", marginVertical: 20 }}>
           History
         </Text>
-        {localHistory.length > 0 ? (
+        {loading ? ( // Show loading indicator while loading
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : localHistory.length > 0 ? (
           localHistory.map((item, index) => (
             <View key={index} style={{ marginBottom: 20, alignItems: "center" }}>
               <Image

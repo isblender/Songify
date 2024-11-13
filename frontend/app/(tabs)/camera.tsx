@@ -57,9 +57,17 @@ export default function CameraScreen() {
           console.error('Error taking picture: No photo captured');
           return
         }
-        const base64 = photo.base64.split(',')[1]
-        console.log(`Uploading image to user ${userId}`)
-        console.log('Base64:', base64.slice(0, 10))
+        const split_base64 = photo.base64.split(',');
+        //console.log('split base64:', split_base64);
+        let base64: String;
+        if (split_base64.length === 1) {
+          base64 = split_base64[0];
+        }
+        else {
+          base64 = split_base64[1];
+        }
+        //console.log('Photo taken:', base64);
+        console.log(`Uploading image to user ${userId}`);
         fetch('https://imagetosong.onrender.com/api/upload', {
           method: 'POST',
           headers: {
@@ -69,8 +77,7 @@ export default function CameraScreen() {
             userId: userId,
             photoBase64: base64
           })
-        })
-        
+        });
         // Handle the photo as needed
       } catch (error) {
         console.error('Error taking picture:', error);
