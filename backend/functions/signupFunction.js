@@ -1,11 +1,9 @@
 // controllers/userController.js
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
 exports.signUp = async (req, res) => {
   const { username, phone, email, password } = req.body;
-
-  console.log("Signup Request - Username:", username, "Phone:", phone, "Email:", email);
 
   try {
     // Check for existing account by phone or email
@@ -28,7 +26,7 @@ exports.signUp = async (req, res) => {
     await User.create(profileData);
     const user = await User.findOne({ email });
 
-    return res.json("newUser: ",user._id);
+    return res.status(200).json({ message: "newUser", userId: user._id });
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ error: "Internal server error" });
