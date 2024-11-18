@@ -53,7 +53,7 @@ export default function History() {
 
       if (response.ok) {
         Alert.alert("Deleted", "The conversion has been deleted.");
-        setLocalHistory((prev) => prev.filter((_, i) => i !== index));
+        setLocalHistory((prev) => prev.filter((_, i) => i !== originalIndex));
       } else {
         throw new Error("Failed to delete the conversion");
       }

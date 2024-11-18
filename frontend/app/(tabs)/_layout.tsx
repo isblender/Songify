@@ -5,7 +5,7 @@ import HistoryScreen from "./history";
 import { useAuth } from "../AuthContext";
 import LoginScreen from "./login";
 import SignupScreen from "./signup";
-
+import SplashScreen from "./splashscreen";
 const Tab = createMaterialTopTabNavigator();
 
 export default function TabLayout() {
