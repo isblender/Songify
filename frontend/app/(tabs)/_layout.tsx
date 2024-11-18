@@ -4,11 +4,17 @@ import CameraScreen from './camera';
 import HistoryScreen from './history';
 import { useAuth } from '../AuthContext';
 import LoginScreen from './login';
+import SplashScreen from './splashscreen';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function TabLayout() {
-  const { userId } = useAuth();
+  const { userId, loading } = useAuth();
+  if (loading) { 
+     return (
+      <SplashScreen />
+     )
+  }
   return (
     <>
     {userId ? (
