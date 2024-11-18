@@ -7,13 +7,20 @@ const http = require("http"); // Import http to create a server
 const { Server } = require("socket.io"); // Import Socket.IO
 
 const app = express();
-app.use(cors());
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(
+  cors({
+    origin: "*", // Or specify "http://localhost:8081" for more security
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"], // Add any other headers your app might send
+    credentials: true, // if you're handling cookies or sessions
+  })
+);
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 connectDB();
 
-app.use('/', routes);
+app.use("/", routes);
 
 // Create an HTTP server and integrate Socket.IO
 const server = http.createServer(app); // Create an HTTP server with Express
