@@ -38,7 +38,7 @@ exports.upload = async (req, res) => {
     // Upload the image to S3
     const s3Response = await s3.upload(s3Params).promise();
     const imageUrl = s3Response.Location; // Get the URL of the uploaded image
-
+    const prompt = `Here is an image: ${imageUrl}. Recommend a song that directly relates to the main subject or unique details of this photo, such as specific objects or features. Focus on matching both the literal content and the overall vibe of the scene, providing a song title and artist that capture these elements.`;
     // Create a new conversion record with the S3 image URL
     const newConversion = new Conversion({
       userId,

@@ -7,9 +7,7 @@ exports.signUp = async (req, res) => {
 
   try {
     // Check for existing account by phone or email
-    const accountExist = await User.findOne({
-      $or: [{ phone }, { email }],
-    });
+    const accountExist = await User.findOne({ email });
     const usernameExist = await User.findOne({ username });
 
     if (accountExist) {
