@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../AuthContext'; // Adjust the path to your AuthContext file
+import { useAuth } from '../../AuthContext'; // Adjust the path to your AuthContext file
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 
 const LoginScreen = () => {
@@ -55,10 +55,6 @@ const LoginScreen = () => {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLogin} />
-      <Button
-        title="Don't have an account? Sign up"
-        onPress={() => navigation.navigate('signup')} // Navigate to SignupScreen
-      />
     </View>
   );
 };

@@ -3,9 +3,10 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import CameraScreen from "./camera";
 import HistoryScreen from "./history";
 import { useAuth } from "../AuthContext";
-import LoginScreen from "./login";
-import SignupScreen from "./signup";
+import LoginScreen from "./components/LoginScreen";
+import SignupScreen from "./components/SignupScreen";
 import SplashScreen from "./splashscreen";
+import WelcomeScreen from "./WelcomeScreen";
 const Tab = createMaterialTopTabNavigator();
 
 export default function TabLayout() {
@@ -47,7 +48,7 @@ export default function TabLayout() {
           />
         </Tab.Navigator>
       ) : (
-        <LoginScreen />
+        <WelcomeScreen />
       )}
     </>
   );

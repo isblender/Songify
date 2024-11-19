@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 import { AuthProvider } from './AuthContext'; // Adjust the path to your AuthContext file
-import LoginScreen from './(tabs)/login'; 
+import LoginScreen from './(tabs)/components/LoginScreen'; 
 import {NavigationContainer} from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 

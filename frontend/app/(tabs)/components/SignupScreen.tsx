@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAuth } from "../AuthContext"; // Adjust the path to your AuthContext file
+import { useAuth } from "../../AuthContext"; // Adjust the path to your AuthContext file
 import { useNavigation } from "@react-navigation/native";
 
 const SignupScreen = () => {
