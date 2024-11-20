@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, TextInput, TouchableOpacity, Text, Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../AuthContext'; // Adjust the path to your AuthContext file
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import styles from '../../styles/WelcomeStyles'; // Import the styles from WelcomeStyles
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUserId } = useAuth();
-  const navigation = useNavigation(); // Initialize navigation
+
+  // Animation value for the fade-in effect
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value: 0
+
+  // Use useEffect to start the fade-in animation when the component mounts
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1, // Fade to opacity 1
+      duration: 800, // Duration of the animation in milliseconds
+      useNativeDriver: true, // Use native driver for better performance
+    }).start();
+  }, [fadeAnim]);
 
   // Function to handle login
   const handleLogin = async () => {
@@ -39,45 +50,27 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="black"
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
-        style={styles.input}
+        style={styles.input} 
         placeholder="Password"
+        placeholderTextColor="black"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-    </View>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Sign In</Text> 
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  input: {
-    width: '80%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 5,
-  },
-});
 
 export default LoginScreen;

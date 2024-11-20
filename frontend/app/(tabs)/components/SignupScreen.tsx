@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import { View, TextInput, TouchableOpacity, Text, Animated, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../../AuthContext"; // Adjust the path to your AuthContext file
 import { useNavigation } from "@react-navigation/native";
+import styles from "../../styles/WelcomeStyles"; // Import the styles from WelcomeStyles
 
 const SignupScreen = () => {
   const [email, setEmail] = useState("");
@@ -12,9 +13,22 @@ const SignupScreen = () => {
   const { setUserId } = useAuth();
   const navigation = useNavigation();
 
+  // Animation value for the fade-in effect
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  // Use useEffect to start the fade-in animation when the component mounts
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
+  // Function to handle signup
   const handleSignup = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/signup", {
+      const response = await fetch("https://imagetosong.onrender.com/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, phone, email, password }),
@@ -22,38 +36,24 @@ const SignupScreen = () => {
       const data = await response.json();
 
       if (data.message === "accountExist") {
-        Alert.alert(
-          "Account Exists",
-          "An account with this phone or email already exists."
-        );
+        Alert.alert("Account Exists", "An account with this phone or email already exists.");
       } else if (data.message === "usernameExist") {
-        Alert.alert(
-          "Username Exists",
-          "The username you've entered is already in use."
-        );
+        Alert.alert("Username Exists", "The username you've entered is already in use.");
       } else if (data.message === "newUser") {
-        Alert.alert(
-          "Signup Successful",
-          "Your account has been created successfully!"
-        );
+        Alert.alert("Signup Successful", "Your account has been created successfully!");
+        await AsyncStorage.setItem('userId', data.userId);
         setUserId(data.userId);
-
-        navigation.navigate("index");
       } else {
         Alert.alert("Error", "An unknown error occurred.");
       }
     } catch (error) {
       console.error("Error during signup:", error);
-      Alert.alert(
-        "Error",
-        "An error occurred while signing up. Please try again later."
-      );
+      Alert.alert("Error", "An error occurred while signing up. Please try again later.");
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -79,30 +79,11 @@ const SignupScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Create an account" onPress={handleSignup} />
-    </View>
+      <TouchableOpacity style={styles.button} onPress={handleSignup}>
+        <Text style={styles.buttonText}>Create an account</Text>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  input: {
-    width: "80%",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 5,
-  },
-});
 
 export default SignupScreen;

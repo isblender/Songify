@@ -71,7 +71,7 @@ export default function History() {
         justifyContent: "center",
         alignItems: "flex-end",
         paddingHorizontal: 20,
-        height: "80%",
+        height: "250",
         borderRadius: 10,
       }}
     >
@@ -108,11 +108,11 @@ export default function History() {
   return (
     <SafeAreaView>
       <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center" }}>
-        <Text style={{ fontSize: 24, fontWeight: "bold", marginVertical: 20 }}>
+        <Text style={{ fontSize: 24, fontWeight: "bold", marginVertical: 20, fontFamily: 'serif',}}>
           History
         </Text>
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#accaa1" />
         ) : localHistory.length > 0 ? (
           localHistory.slice().reverse().map((item, index) => (
             <Swipeable
@@ -122,7 +122,7 @@ export default function History() {
               <View style={{ marginBottom: 20, alignItems: "center" }}>
                 <Image
                   source={{ uri: item.photo }}
-                  style={{ width: 200, height: 200, borderRadius: 10 }}
+                  style={{ width: 250, height: 250, borderRadius: 10 }}
                 />
                 <Text style={{ marginTop: 10 }}>{item.songName}</Text>
               </View>

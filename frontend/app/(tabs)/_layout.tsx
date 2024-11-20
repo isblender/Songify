@@ -23,15 +23,18 @@ export default function TabLayout() {
           tabBarPosition="bottom"
           screenOptions={{
             tabBarStyle: {
-              backgroundColor: "rgb(10,10,10)", // Dark background
+              backgroundColor: "rgb(70 87 62)", // Dark background
               opacity: 0.8, // Set opacity
+              height: 70, // Set the height
             },
             tabBarIndicatorStyle: {
-              backgroundColor: "white", // Indicator color
+              backgroundColor: "white",
             },
             tabBarLabelStyle: {
-              fontSize: 14, // Font size of the tab labels
-              color: "white", // Text color
+              fontSize: 14,
+              fontFamily: 'roboto', // Font size of the tab labels
+              color: "white",
+              fontWeight: 'bold', // Text color
             },
           }}
           initialRouteName="camera"

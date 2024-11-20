@@ -16,7 +16,7 @@ import {
   CameraCapturedPicture,
 } from 'expo-camera';
 import { useRouter } from 'expo-router';
-import { styles } from '../styles/CameraStyles'; // Import styles
+import styles from '../styles/CameraStyles'; // Import styles
 import { useAuth } from '../AuthContext';
 
 export default function CameraScreen() {
