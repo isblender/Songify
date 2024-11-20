@@ -42,7 +42,7 @@ exports.upload = async (req, res) => {
     // Get song data from Deezer API
     const deezerResponse = await getSongData(songName);
     console.log('deezerResponse: ', deezerResponse);
-    const { title, artist, previewUrl, albumCover } = deezerResponse.data.song;
+    const { title, artist, previewUrl, albumCover } = deezerResponse;
 
     // Create a new conversion record with the S3 image URL
     const newConversion = new Conversion({
