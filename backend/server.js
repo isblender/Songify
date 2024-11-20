@@ -10,7 +10,7 @@ const app = express();
 app.use(
   cors({
     origin: "*", // Or specify "http://localhost:8081" for more security
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"], // Add any other headers your app might send
     credentials: true, // if you're handling cookies or sessions
   })
@@ -27,7 +27,7 @@ const server = http.createServer(app); // Create an HTTP server with Express
 const io = new Server(server, {
   cors: {
     origin: "*", // Allow all origins (adjust as needed for security)
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "DELETE"],
   },
 });
 
