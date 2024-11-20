@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, Animated } from 'react-native';
 import SignupScreen from './components/SignupScreen';
 import LoginScreen from './components/LoginScreen';
@@ -40,6 +40,31 @@ const WelcomeScreen = () => {
     }).start();
   };
 
+  // Function to handle reverse animation
+  const handleReverse = () => {
+    // Start the fade-out animation for the login/signup form
+    Animated.timing(fadeAnim, {
+      toValue: 0, // Fade out the login/signup form
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      setShowComponent(false);
+      // Move the title back down
+      Animated.timing(blockPosition, {
+        toValue: 0, // Move the block back to its original position
+        duration: 800,
+        useNativeDriver: true,
+      }).start(() => {
+        // Once the title has moved back down, fade in the buttons
+        Animated.timing(buttonOpacity, {
+          toValue: 1, // Make the buttons fully opaque
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
+      });
+    });
+  };
+
   return (
     <View style={styles.container}>
       <Animated.View
@@ -65,12 +90,15 @@ const WelcomeScreen = () => {
           </TouchableOpacity>
         </Animated.View>
         {showComponent && (
-        <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
-          {hasAccount ? <LoginScreen /> : <SignupScreen />}
-        </Animated.View>
-      )}
+          <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
+            {hasAccount ? (
+              <LoginScreen onBack={handleReverse} /> // Pass handleReverse as a prop
+            ) : (
+              <SignupScreen onBack={handleReverse} /> // Pass handleReverse as a prop
+            )}
+          </Animated.View>
+        )}
       </Animated.View>
-      {/* Render LoginScreen or SignupScreen with opacity animation */}
     </View>
   );
 };

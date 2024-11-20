@@ -2,16 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { View, TextInput, TouchableOpacity, Text, Animated, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../../AuthContext"; // Adjust the path to your AuthContext file
-import { useNavigation } from "@react-navigation/native";
 import styles from "../../styles/WelcomeStyles"; // Import the styles from WelcomeStyles
 
-const SignupScreen = () => {
+const SignupScreen = ({ onBack }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const { setUserId } = useAuth();
-  const navigation = useNavigation();
 
   // Animation value for the fade-in effect
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -81,6 +79,10 @@ const SignupScreen = () => {
       />
       <TouchableOpacity style={styles.button} onPress={handleSignup}>
         <Text style={styles.buttonText}>Create an account</Text>
+      </TouchableOpacity>
+      {/* Add a Back button */}
+      <TouchableOpacity style={styles.button} onPress={onBack}>
+        <Text style={styles.buttonText}>Back</Text>
       </TouchableOpacity>
     </Animated.View>
   );

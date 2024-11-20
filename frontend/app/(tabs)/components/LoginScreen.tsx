@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../AuthContext'; // Adjust the path to your AuthContext file
 import styles from '../../styles/WelcomeStyles'; // Import the styles from WelcomeStyles
 
-const LoginScreen = () => {
+const LoginScreen = ({ onBack }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUserId } = useAuth();
@@ -68,6 +68,10 @@ const LoginScreen = () => {
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Sign In</Text> 
+      </TouchableOpacity>
+      {/* Add a Back button */}
+      <TouchableOpacity style={styles.button} onPress={onBack}>
+        <Text style={styles.buttonText}>Back</Text>
       </TouchableOpacity>
     </Animated.View>
   );
