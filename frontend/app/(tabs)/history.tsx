@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
   View,
@@ -17,6 +17,9 @@ export default function History() {
   const [localHistory, setLocalHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth();
+  
+  // Array of refs for each Swipeable component
+  const swipeableRefs = useRef([]);
 
   // Function to fetch user history
   const getHistory = async () => {
@@ -46,6 +49,10 @@ export default function History() {
     try {
       const originalIndex = localHistory.length - 1 - reversed_index;
       const item = localHistory[originalIndex];
+
+      // Close all open swipeable views
+      swipeableRefs.current.forEach((ref) => ref && ref.close());
+
       const response = await fetch(
         `https://imagetosong.onrender.com/api/delete/conversion/${userId}/${item._id}`,
         { method: "DELETE" }
@@ -65,20 +72,20 @@ export default function History() {
 
   // Render function for the delete action
   const renderDeleteAction = (index) => (
-    <View
-      style={{
-        backgroundColor: "lightgrey",
-        justifyContent: "center",
-        alignItems: "flex-end",
-        paddingHorizontal: 20,
-        height: "250",
-        borderRadius: 10,
-      }}
-    >
-      <TouchableOpacity onPress={() => deleteConversion(index)}>
-        <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity onPress={() => deleteConversion(index)}>
+      <View 
+        style={{
+          backgroundColor: "lightgrey",
+          justifyContent: "center",
+          alignItems: "flex-end",
+          paddingHorizontal: 20,
+          height: 250,
+          borderRadius: 10,
+        }} 
+      >
+          <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   useEffect(() => {
@@ -107,16 +114,14 @@ export default function History() {
 
   return (
     <SafeAreaView>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center" }}>
-        <Text style={{ fontSize: 24, fontWeight: "bold", marginVertical: 20, fontFamily: 'serif',}}>
-          History
-        </Text>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center", padding: 20 }}>
         {loading ? (
           <ActivityIndicator size="large" color="#accaa1" />
         ) : localHistory.length > 0 ? (
           localHistory.slice().reverse().map((item, index) => (
             <Swipeable
               key={index}
+              ref={(ref) => (swipeableRefs.current[index] = ref)} // Assign ref to each Swipeable
               renderLeftActions={() => renderDeleteAction(index)}
             >
               <View style={{ marginBottom: 20, alignItems: "center" }}>

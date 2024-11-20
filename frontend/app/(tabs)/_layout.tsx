@@ -32,7 +32,7 @@ export default function TabLayout() {
             },
             tabBarLabelStyle: {
               fontSize: 14,
-              fontFamily: 'roboto', // Font size of the tab labels
+              //fontFamily: 'arial', // Font size of the tab labels
               color: "white",
               fontWeight: 'bold', // Text color
             },
