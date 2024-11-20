@@ -9,15 +9,19 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
+import { Audio } from "expo-av"; // Import Audio from expo-av
 import { io } from "socket.io-client"; // Import Socket.IO client
 import { useAuth } from "../AuthContext";
 import { Swipeable } from "react-native-gesture-handler"; // Import Swipeable
+import playPause from "../../assets/images/playpause.png";
 
 export default function History() {
   const [localHistory, setLocalHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth();
-  
+  const audioRef = useRef(new Audio.Sound()); // Reference for the audio player
+  const [isPlaying, setIsPlaying] = useState(false); // Track play/pause state
+
   // Array of refs for each Swipeable component
   const swipeableRefs = useRef([]);
 
@@ -26,13 +30,8 @@ export default function History() {
     try {
       if (userId !== null) {
         setLoading(true);
-        console.log(`Attempting to get history of user ${userId}`);
         const response = await fetch(`https://imagetosong.onrender.com/api/history/${userId}`);
         const data = await response.json();
-
-        console.log(`History fetched for ${userId}`);
-        console.log(data);
-
         setLocalHistory(data);
       } else {
         throw new Error("User ID is null");
@@ -49,8 +48,6 @@ export default function History() {
     try {
       const originalIndex = localHistory.length - 1 - reversed_index;
       const item = localHistory[originalIndex];
-
-      // Close all open swipeable views
       swipeableRefs.current.forEach((ref) => ref && ref.close());
 
       const response = await fetch(
@@ -73,7 +70,7 @@ export default function History() {
   // Render function for the delete action
   const renderDeleteAction = (index) => (
     <TouchableOpacity onPress={() => deleteConversion(index)}>
-      <View 
+      <View
         style={{
           backgroundColor: "lightgrey",
           justifyContent: "center",
@@ -81,29 +78,45 @@ export default function History() {
           paddingHorizontal: 20,
           height: 250,
           borderRadius: 10,
-        }} 
+        }}
       >
-          <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
+        <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
       </View>
     </TouchableOpacity>
   );
 
+  // Function to handle audio playback
+  const toggleAudioPlayback = async (previewUrl) => {
+    try {
+      if (isPlaying) {
+        // Pause the audio if it's playing
+        await audioRef.current.pauseAsync();
+        setIsPlaying(false);
+      } else {
+        // Load and play the audio if it's not playing
+        await audioRef.current.unloadAsync(); // Unload previous sound
+        await audioRef.current.loadAsync({ uri: previewUrl });
+        await audioRef.current.playAsync();
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    }
+  };
+
   useEffect(() => {
     if (!userId) {
-      console.error("User ID is not available yet");
       return;
     }
 
     const socket = io("https://imagetosong.onrender.com");
 
     socket.on("connect", () => {
-      console.log("Connected to WebSocket server");
       socket.emit("joinRoom", userId);
       getHistory();
     });
 
     socket.on("refreshHistory", () => {
-      console.log("Received refreshHistory event, fetching history...");
       getHistory();
     });
 
@@ -111,6 +124,13 @@ export default function History() {
       socket.disconnect();
     };
   }, [userId]);
+
+  useEffect(() => {
+    return () => {
+      // Unload the sound when the component unmounts
+      audioRef.current.unloadAsync();
+    };
+  }, []);
 
   return (
     <SafeAreaView>
@@ -120,8 +140,8 @@ export default function History() {
         ) : localHistory.length > 0 ? (
           localHistory.slice().reverse().map((item, index) => (
             <Swipeable
-              key={index}
-              ref={(ref) => (swipeableRefs.current[index] = ref)} // Assign ref to each Swipeable
+              key={item._id || index}
+              ref={(ref) => (swipeableRefs.current[index] = ref)}
               renderLeftActions={() => renderDeleteAction(index)}
             >
               <View style={{ marginBottom: 20, alignItems: "center" }}>
@@ -129,7 +149,21 @@ export default function History() {
                   source={{ uri: item.photo }}
                   style={{ width: 250, height: 250, borderRadius: 10 }}
                 />
-                <Text style={{ marginTop: 10 }}>{item.songName}</Text>
+
+                {/* Make the entire line clickable to toggle audio */}
+                <TouchableOpacity
+                  onPress={() => toggleAudioPlayback(item.previewUrl)}
+                  style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
+                >
+                  <Image
+                    source={{ uri: item.albumCover }}
+                    style={{ width: 50, height: 50, borderRadius: 5, marginRight: 10 }}
+                  />
+                  <View style={{flexDirection: "column"}}>
+                    <Text>{item.title}</Text>
+                    <Text>{item.artist}</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
             </Swipeable>
           ))
