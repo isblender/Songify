@@ -18,7 +18,6 @@ def generate_caption():
         # Get the image URL from the request
         data = request.get_json()
         image_url = data.get("image_url")
-
         if not image_url:
             return jsonify({"error": "Image URL is required"}), 400
 
@@ -28,7 +27,7 @@ def generate_caption():
         inputs = processor(images=image, return_tensors="pt")
 
         # Generate a caption
-        caption_ids = model.generate(**inputs)
+        caption_ids = model.generate(**inputs, num_beams=3, max_length=20)
         caption = processor.decode(caption_ids[0], skip_special_tokens=True)
 
         return jsonify({"caption": caption})
