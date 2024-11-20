@@ -1,7 +1,7 @@
 // /Users/isaacblender/Desktop/songify/backend/functions/getSongData.js
 const axios = require("axios");
 
-const getRecommendedSong = async (query) => {
+const getSongData = async (query) => {
   try {
     // Construct the URL with RapidAPI host and key
     const response = await axios.get(`https://deezerdevs-deezer.p.rapidapi.com/search`, {
@@ -31,4 +31,4 @@ const getRecommendedSong = async (query) => {
   }
 };
 
-module.exports = { getRecommendedSong };
+module.exports = { getSongData };

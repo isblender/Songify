@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const Conversion = require("../models/Conversion");
 const User = require("../models/User");
+const {getSongData} = require("./getSongData");
 
 // Configure AWS
 AWS.config.update({
@@ -13,7 +14,7 @@ const s3 = new AWS.S3();
 
 exports.upload = async (req, res) => {
   const { userId, photoBase64 } = req.body;
-  const songName = 'test';
+  const songName = 'Cherry wine - hozier';
 
   try {
     const { getIoInstance } = require("../server");
@@ -34,16 +35,23 @@ exports.upload = async (req, res) => {
       ContentEncoding: 'base64', // This ensures the content is correctly encoded
       ContentType: 'image/jpeg' // Adjust based on your image type
     };
-
     // Upload the image to S3
     const s3Response = await s3.upload(s3Params).promise();
     const imageUrl = s3Response.Location; // Get the URL of the uploaded image
     
+    // Get song data from Deezer API
+    const deezerResponse = await getSongData(songName);
+    console.log('deezerResponse: ', deezerResponse);
+    const { title, artist, previewUrl, albumCover } = deezerResponse.data.song;
+
     // Create a new conversion record with the S3 image URL
     const newConversion = new Conversion({
       userId,
       photo: imageUrl, // Store the URL instead of binary data
-      songName,
+      title,           // Add title from Deezer API
+      artist,          // Add artist from Deezer API
+      previewUrl,      // Add preview URL from Deezer API
+      albumCover,      // Add album cover from Deezer API
     });
 
     await newConversion.save();
