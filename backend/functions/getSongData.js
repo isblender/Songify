@@ -3,6 +3,7 @@ const axios = require('axios');
 const getRecommendedSong = async (query) => {
   try {
     const deezerApiUrl = `https://api.deezer.com/search?q=${encodeURIComponent(query)}`;
+    console.log(deezerApiUrl);
     const response = await axios.get(deezerApiUrl);
 
     if (response.data && response.data.data.length > 0) {
