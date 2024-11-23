@@ -145,12 +145,10 @@ export default function History() {
               renderLeftActions={() => renderDeleteAction(index)}
             >
               <View style={{ marginBottom: 20, alignItems: "center" }}>
-                <Image
-                  source={{ uri: item.photo }}
+                <Image source={{ uri: item.photo: string }}
                   style={{ width: 250, height: 250, borderRadius: 10 }}
                 />
 
-                {/* Make the entire line clickable to toggle audio */}
                 <TouchableOpacity
                   onPress={() => toggleAudioPlayback(item.previewUrl)}
                   style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}

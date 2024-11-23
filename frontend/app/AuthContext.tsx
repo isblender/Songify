@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const loadUserId = async () => {
       try {
+        //const storedUserId = null; for testing login
         const storedUserId = await AsyncStorage.getItem('userId');
         if (storedUserId) {
           setUserId(storedUserId);
