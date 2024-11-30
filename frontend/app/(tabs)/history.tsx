@@ -29,7 +29,9 @@ export default function History() {
     try {
       if (userId !== null) {
         setLoading(true);
-        const response = await fetch(`https://imagetosong.onrender.com/api/history/${userId}`);
+        const response = await fetch(
+          `https://imagetosong.onrender.com/api/history/${userId}`
+        );
         const data = await response.json();
         setLocalHistory(data);
       } else {
