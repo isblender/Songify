@@ -2,18 +2,17 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
   View,
-  Image,
   ScrollView,
   SafeAreaView,
   ActivityIndicator,
   Alert,
-  TouchableOpacity,
 } from "react-native";
-import { Audio } from "expo-av"; // Import Audio from expo-av
-import { io } from "socket.io-client"; // Import Socket.IO client
+import { Audio } from "expo-av"; 
+import { io } from "socket.io-client"; 
 import { useAuth } from "../AuthContext";
-import { Swipeable } from "react-native-gesture-handler"; // Import Swipeable
-import playPause from "../../assets/images/playpause.png";
+import { Swipeable } from "react-native-gesture-handler"; 
+import SwipeableHistoryItem from "./components/HistoryItem";
+import styles from "../styles/HistoryStyles";
 
 export default function History() {
   const [localHistory, setLocalHistory] = useState([]);
@@ -56,34 +55,14 @@ export default function History() {
       );
 
       if (response.ok) {
-        Alert.alert("Deleted", "The conversion has been deleted.");
         setLocalHistory((prev) => prev.filter((_, i) => i !== originalIndex));
       } else {
         throw new Error("Failed to delete the conversion");
       }
     } catch (error) {
       console.error("Error deleting conversion:", error);
-      Alert.alert("Error", "Failed to delete the conversion.");
     }
   };
-
-  // Render function for the delete action
-  const renderDeleteAction = (index) => (
-    <TouchableOpacity onPress={() => deleteConversion(index)}>
-      <View
-        style={{
-          backgroundColor: "lightgrey",
-          justifyContent: "center",
-          alignItems: "flex-end",
-          paddingHorizontal: 20,
-          height: 250,
-          borderRadius: 10,
-        }}
-      >
-        <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
-      </View>
-    </TouchableOpacity>
-  );
 
   // Function to handle audio playback
   const toggleAudioPlayback = async (previewUrl) => {
@@ -131,40 +110,24 @@ export default function History() {
       audioRef.current.unloadAsync();
     };
   }, []);
-
   return (
     <SafeAreaView>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center", padding: 20 }}>
+      <ScrollView contentContainerStyle={styles.container}>
         {loading ? (
           <ActivityIndicator size="large" color="#accaa1" />
         ) : localHistory.length > 0 ? (
-          localHistory.slice().reverse().map((item, index) => (
-            <Swipeable
+          localHistory.slice().reverse().map((item, index) => {
+            console.log(item);
+            return (
+              <SwipeableHistoryItem
               key={item._id || index}
-              ref={(ref) => (swipeableRefs.current[index] = ref)}
-              renderLeftActions={() => renderDeleteAction(index)}
-            >
-              <View style={{ marginBottom: 20, alignItems: "center" }}>
-                <Image source={{ uri: item.photo: string }}
-                  style={{ width: 250, height: 250, borderRadius: 10 }}
-                />
-
-                <TouchableOpacity
-                  onPress={() => toggleAudioPlayback(item.previewUrl)}
-                  style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
-                >
-                  <Image
-                    source={{ uri: item.albumCover }}
-                    style={{ width: 50, height: 50, borderRadius: 5, marginRight: 10 }}
-                  />
-                  <View style={{flexDirection: "column"}}>
-                    <Text>{item.title}</Text>
-                    <Text>{item.artist}</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </Swipeable>
-          ))
+              item={item}
+              index={index}
+              swipeableRef={swipeableRefs}
+              deleteConversion={deleteConversion}
+              toggleAudioPlayback={toggleAudioPlayback}
+            />
+          )})
         ) : (
           <Text>No history available</Text>
         )}
