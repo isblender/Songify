@@ -30,7 +30,9 @@ export default function History() {
     try {
       if (userId !== null) {
         setLoading(true);
-        const response = await fetch(`https://imagetosong.onrender.com/api/history/${userId}`);
+        const response = await fetch(
+          `https://imagetosong.onrender.com/api/history/${userId}`
+        );
         const data = await response.json();
         setLocalHistory(data);
       } else {
@@ -134,37 +136,56 @@ export default function History() {
 
   return (
     <SafeAreaView>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center", padding: 20 }}>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          alignItems: "center",
+          padding: 20,
+        }}
+      >
         {loading ? (
           <ActivityIndicator size="large" color="#accaa1" />
         ) : localHistory.length > 0 ? (
-          localHistory.slice().reverse().map((item, index) => (
-            <Swipeable
-              key={item._id || index}
-              ref={(ref) => (swipeableRefs.current[index] = ref)}
-              renderLeftActions={() => renderDeleteAction(index)}
-            >
-              <View style={{ marginBottom: 20, alignItems: "center" }}>
-                <Image source={{ uri: item.photo: string }}
-                  style={{ width: 250, height: 250, borderRadius: 10 }}
-                />
-
-                <TouchableOpacity
-                  onPress={() => toggleAudioPlayback(item.previewUrl)}
-                  style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
-                >
+          localHistory
+            .slice()
+            .reverse()
+            .map((item, index) => (
+              <Swipeable
+                key={item._id || index}
+                ref={(ref) => (swipeableRefs.current[index] = ref)}
+                renderLeftActions={() => renderDeleteAction(index)}
+              >
+                <View style={{ marginBottom: 20, alignItems: "center" }}>
                   <Image
-                    source={{ uri: item.albumCover }}
-                    style={{ width: 50, height: 50, borderRadius: 5, marginRight: 10 }}
+                    source={{ uri: item.photo }}
+                    style={{ width: 250, height: 250, borderRadius: 10 }}
                   />
-                  <View style={{flexDirection: "column"}}>
-                    <Text>{item.title}</Text>
-                    <Text>{item.artist}</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </Swipeable>
-          ))
+
+                  <TouchableOpacity
+                    onPress={() => toggleAudioPlayback(item.previewUrl)}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: 10,
+                    }}
+                  >
+                    <Image
+                      source={{ uri: item.albumCover }}
+                      style={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: 5,
+                        marginRight: 10,
+                      }}
+                    />
+                    <View style={{ flexDirection: "column" }}>
+                      <Text>{item.title}</Text>
+                      <Text>{item.artist}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </Swipeable>
+            ))
         ) : (
           <Text>No history available</Text>
         )}
