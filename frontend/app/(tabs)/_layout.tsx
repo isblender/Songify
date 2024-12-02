@@ -1,6 +1,7 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import CameraScreen from "./camera";
+
 import HistoryScreen from "./history";
 import { useAuth } from "../AuthContext";
 import LoginScreen from "./components/LoginScreen";
@@ -11,10 +12,8 @@ const Tab = createMaterialTopTabNavigator();
 
 export default function TabLayout() {
   const { userId, loading } = useAuth();
-  if (loading) { 
-     return (
-      <SplashScreen />
-     )
+  if (loading) {
+    return <SplashScreen />;
   }
   return (
     <>
@@ -34,7 +33,7 @@ export default function TabLayout() {
               fontSize: 14,
               //fontFamily: 'arial', // Font size of the tab labels
               color: "white",
-              fontWeight: 'bold', // Text color
+              fontWeight: "bold", // Text color
             },
           }}
           initialRouteName="camera"
