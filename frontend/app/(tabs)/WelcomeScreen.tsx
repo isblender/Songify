@@ -73,7 +73,7 @@ const WelcomeScreen = () => {
           { transform: [{ translateY: blockPosition }] },
         ]}
       >
-        <Text style={styles.title}>Songify</Text>
+        <Text style={styles.title}>Syncadia</Text>
         {/* Animated button container */}
         <Animated.View style={[styles.buttonContainer, { opacity: buttonOpacity }]}>
           <TouchableOpacity
