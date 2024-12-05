@@ -14,7 +14,6 @@ const s3 = new AWS.S3();
 
 exports.upload = async (req, res) => {
   const { userId, photoBase64 } = req.body;
-  const songName = 'Cherry wine - hozier';
 
   try {
     const { getIoInstance } = require("../server");
@@ -38,7 +37,7 @@ exports.upload = async (req, res) => {
     // Upload the image to S3
     const s3Response = await s3.upload(s3Params).promise();
     const imageUrl = s3Response.Location; // Get the URL of the uploaded image
-    
+    const songName ="Happy - Pharrell Williams" // get song name from the request body //
     // Get song data from Deezer API
     const deezerResponse = await getSongData(songName);
     console.log('deezerResponse: ', deezerResponse);
