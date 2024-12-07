@@ -122,7 +122,7 @@ export default function History() {
             console.log(item);
             return (
               <SwipeableHistoryItem
-              key={index}
+              key={item._id}
               item={item}
               index={index}
               swipeableRef={swipeableRefs}

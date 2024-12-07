@@ -1,5 +1,0 @@
-Flask
-transformers
-torch
-Pillow
-requests

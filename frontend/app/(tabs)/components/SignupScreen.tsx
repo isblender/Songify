@@ -57,24 +57,28 @@ const SignupScreen = ({ onBack }) => {
         placeholder="Username"
         value={username}
         onChangeText={setUsername}
+        placeholderTextColor={'black'}
       />
       <TextInput
         style={styles.input}
         placeholder="Phone Number"
         value={phone}
         onChangeText={setPhone}
+        placeholderTextColor={'black'}
       />
       <TextInput
         style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+        placeholderTextColor={'black'}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
+        placeholderTextColor={'black'}
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleSignup}>
