@@ -1,6 +1,6 @@
 # Image-to-Song App
 
-This is the full-stack implementation for the **Image-to-Song** iOS app, which allows users to take a picture, apply an algorithm on it, and get a song that resembles the image. The backend is built with **Node.js** and **Express**, and it uses **MongoDB and AWS S3** for user data management and storage of image history and song recommendations. The frontend is built with React Native.
+This is the full-stack implementation for an **Image-to-Song** iOS app, which allows users to take a picture and then receive a song that resembles the vibe and content of the image. The backend is built with **Node.js** and **Express**, and it uses **MongoDB and AWS S3** for user data management and storage of image history and song recommendations. The frontend is built with React Native.
 Although I didn't end up getting the song reccomendation algorithm deployed due to costs, it is a dockerized pipeline that utilizes a pretrained BLIP image-captioning model fed into OpenAI's ChatGPT 4 to reccomend a song.
 ## Features
 
